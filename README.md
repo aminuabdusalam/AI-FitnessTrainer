@@ -1,6 +1,7 @@
 # **AI-FitnessTrainer**
 An AI personal fitness trainer embedded with a storage &amp; recommender system and an AI virtual mouse.
 
+
 ## **Background**:
 This project serves as an opportunity to enhance learning and exposure to the exciting computer vision field. Today, we see our technologies like computer vision can be applied in automating our everyday activities and the process of getting fit is not excluded. For instance, taking on activities like bouldering and hiking to stay fit was not a huge success for me. If I had an AI Fitness Trainer, accomplishing my fitness goals would have been much easier. Thus, this project is a win-win, as the developer gets to enhance their experience while working on something they are super interested in, and the users get a fantastic product that satisfies their need.
 
@@ -20,7 +21,14 @@ This section lists the milestones of the project spread across two semesters (Fa
 
 ![timeline](timeline.png)
 
+## Run the Trainer:
+
+```
+python PoseEstimationBasic.py
+```
+
 ## **References**:
 Project Proposal: [Project Proposal](https://1drv.ms/w/s!AlGAL8aQVodoo2kBj1iwRQkNZL4j?e=aPcxXc)
 MediaPipe Pose Solutions [MediaPipe Pose Solutions](https://google.github.io/mediapipe/solutions/pose.html)
 More on MediaPipe BlazePose GHUM 3D Model [More on MediaPipe Pose Model](https://drive.google.com/file/d/10WlcTvrQnR_R2TdTmKw0nkyRLqrwNkWU/preview)
+
