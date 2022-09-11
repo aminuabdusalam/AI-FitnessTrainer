@@ -30,6 +30,6 @@ while True:
     previous_time = current_time
 
     cv2.putText(img, str(int(fps)), (70,50),
-                cv2.FONT_HERSHEY_PLAIN, 3, (255,0,0), 3)    #renders the text string (i.e.fps) in img.
+                cv2.FONT_HERSHEY_PLAIN, 3, (0,255,0), 3)    #renders the text string (i.e.fps) in img.
     cv2.imshow("Image", img)    #displays image in img window.
     cv2.waitKey(1)  #displays the image for 1 milliseconds.
