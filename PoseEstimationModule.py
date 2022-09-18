@@ -1,7 +1,9 @@
 import enum
 import cv2
 import mediapipe as mp
+import numpy as np
 import time
+from math import atan, atan2, degrees
 
 
 
@@ -70,16 +72,67 @@ class PoseDetector():
             img: the image.
             draw: Whether user wants to draw landmarks i.e display in the image or not.        
         """
-        landmarks =[]
+        self.landmarks =[]
         if self.results.pose_landmarks: #checks if landmark is detected.
             for id,landmark in enumerate(self.results.pose_landmarks.landmark): #extracts and labels info of each landmark.
                 height, width, channel = img.shape  #
                 # print(id, landmark)
                 cx, cy = int(landmark.x*width), int(landmark.y*height) #calculates actual x and y values [in int since pixels are ints] since mp_pose returns a ratio of x & y to width and height respectively.
-                landmarks.append([id,cx,cy])
+                self.landmarks.append([id,cx,cy])
                 if draw:
                     cv2.circle(img,  (cx, cy), 15, (255, 0, 0), cv2.FILLED) #confirms and shows that pose detection is working properly by filling landmarks.
-        return landmarks
+        return self.landmarks
+
+
+    def find_angle(self, img, landmark1, landmark2, landmark3, draw=True):
+        """Gets angle between three landmarks(points) in an image.
+        Args:
+            img: the image.
+            landmark1: the first landmark.
+            landmark2: the second landmark (fulcrum point).
+            landmark3: the third landmark.
+            draw: Whether user wants to draw landmarks i.e display in the image or not.        
+        """
+
+        # Retreive the coordinates of the three landmarks
+        _,x1, y1 = self.landmarks[landmark1]  #retrieves the x and y coordinate of the landmark1
+        _,x2, y2 = self.landmarks[landmark2]  #retrieves the x and y coordinate of the landmark2
+        _,x3, y3 = self.landmarks[landmark3]  #retrieves the x and y coordinate of the landmark3
+
+
+        # Calculate the angle between the landmarks (points).
+        angle = degrees(atan2(y3-y2, x3-x2) - 
+                        atan2(y1-y2, x1-x2))    #convert from radians to degree (224 degrees)
+        # print(angle)
+
+        #credit for method to calculate angle: https://manivannan-ai.medium.com/find-the-angle-between-three-points-from-2d-using-python-348c513e2cd
+        a = np.array([x1,y1])  
+        b = np.array([x2,y2])
+        c = np.array([x3,y3])
+
+        ba = a - b
+        bc = c - b
+        cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
+        angle = np.arccos(cosine_angle)
+        angle = np.degrees(angle)
+        print(angle)   #134 degrees
+
+
+
+        #Draw to make sure landmarks(points) are being detected correctly.
+        if draw:  
+            cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 3) #draw line (thickness:3) connecting landmark1 and landmark2
+            cv2.line(img, (x2, y2), (x3, y3), (0, 255, 0), 3) #draw line (thickness:3) connecting landmark2 and landmark3
+            
+            cv2.circle(img,  (x1, y1), 10, (255, 0, 0), cv2.FILLED) #confirms and shows that that the landmark1 is being detected correctly by filling the landmark in the image.
+            cv2.circle(img,  (x1, y1), 15, (255, 0, 0), 2) #draws a larger circle (thickness:2) over the filled circle
+            cv2.circle(img,  (x2, y2), 10, (255, 0, 0), cv2.FILLED) #confirms and shows that that the landmark2 is being detected correctly by filling the landmark in the image.
+            cv2.circle(img,  (x2, y2), 15, (255, 0, 0), 2) #draws a larger circle (thickness:2) over the filled circle
+            cv2.circle(img,  (x3, y3), 10, (255, 0, 0), cv2.FILLED) #confirms and shows that that the landmark3 is being detected correctly by filling the landmark in the image.
+            cv2.circle(img,  (x3, y3), 15, (255, 0, 0), 2) #draws a larger circle (thickness:2) over the filled circle
+
+            cv2.putText(img, str(int(angle)), (x2-80, y2+10),
+                        cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2) #place angle "text" close to middle point (x2, y2)
 
 
 def main():
