@@ -101,9 +101,10 @@ class PoseDetector():
 
 
         # Calculate the angle between the landmarks (points).
-        angle = degrees(atan2(y3-y2, x3-x2) - 
-                        atan2(y1-y2, x1-x2))    #convert from radians to degree (224 degrees)
-        # print(angle)
+        # angle = degrees(atan2(y3-y2, x3-x2) - 
+        #                 atan2(y1-y2, x1-x2))    #convert from radians to degree (224 degrees)
+        # if angle < 0:
+        #     angle += 360
 
         #credit for method to calculate angle: https://manivannan-ai.medium.com/find-the-angle-between-three-points-from-2d-using-python-348c513e2cd
         a = np.array([x1,y1])  
@@ -114,8 +115,8 @@ class PoseDetector():
         bc = c - b
         cosine_angle = np.dot(ba, bc) / (np.linalg.norm(ba) * np.linalg.norm(bc))
         angle = np.arccos(cosine_angle)
-        angle = np.degrees(angle)
-        print(angle)   #134 degrees
+        angle = 360 - np.degrees(angle) #get exterior angle
+        # print(angle)   #134 degrees
 
 
 
@@ -124,16 +125,16 @@ class PoseDetector():
             cv2.line(img, (x1, y1), (x2, y2), (0, 255, 0), 3) #draw line (thickness:3) connecting landmark1 and landmark2
             cv2.line(img, (x2, y2), (x3, y3), (0, 255, 0), 3) #draw line (thickness:3) connecting landmark2 and landmark3
             
-            cv2.circle(img,  (x1, y1), 10, (255, 0, 0), cv2.FILLED) #confirms and shows that that the landmark1 is being detected correctly by filling the landmark in the image.
-            cv2.circle(img,  (x1, y1), 15, (255, 0, 0), 2) #draws a larger circle (thickness:2) over the filled circle
-            cv2.circle(img,  (x2, y2), 10, (255, 0, 0), cv2.FILLED) #confirms and shows that that the landmark2 is being detected correctly by filling the landmark in the image.
-            cv2.circle(img,  (x2, y2), 15, (255, 0, 0), 2) #draws a larger circle (thickness:2) over the filled circle
-            cv2.circle(img,  (x3, y3), 10, (255, 0, 0), cv2.FILLED) #confirms and shows that that the landmark3 is being detected correctly by filling the landmark in the image.
-            cv2.circle(img,  (x3, y3), 15, (255, 0, 0), 2) #draws a larger circle (thickness:2) over the filled circle
+            cv2.circle(img,  (x1, y1), 10, (0, 0, 255), cv2.FILLED) #confirms and shows that that the landmark1 is being detected correctly by filling the landmark in the image.
+            cv2.circle(img,  (x1, y1), 15, (0, 0, 255), 2) #draws a larger circle (thickness:2) over the filled circle
+            cv2.circle(img,  (x2, y2), 10, (0, 0, 255), cv2.FILLED) #confirms and shows that that the landmark2 is being detected correctly by filling the landmark in the image.
+            cv2.circle(img,  (x2, y2), 15, (0, 0, 255), 2) #draws a larger circle (thickness:2) over the filled circle
+            cv2.circle(img,  (x3, y3), 10, (0, 0, 255), cv2.FILLED) #confirms and shows that that the landmark3 is being detected correctly by filling the landmark in the image.
+            cv2.circle(img,  (x3, y3), 15, (0, 0, 255), 2) #draws a larger circle (thickness:2) over the filled circle
 
             cv2.putText(img, str(int(angle)), (x2-80, y2+10),
                         cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2) #place angle "text" close to middle point (x2, y2)
-
+        return angle
 
 def main():
     cap = cv2.VideoCapture('PoseVideos/armraise_1.mp4')
