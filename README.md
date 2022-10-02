@@ -13,13 +13,13 @@ The AI fitness trainer will help the user lose weight, gain muscle, and accompli
 ## **Requirements**:
 This section lists all the requirements to be completed for the project and their priority levels (0 – must have, 1 – partial progress must have, 2 – nice to have if time permits).
 
-![functional requirements for the project](requirements.png)
+![functional requirements for the project](Miscellaneous/requirements.png)
 
 
 ## **Timeline**:
 This section lists the milestones of the project spread across two semesters (Fall 2022 and Spring 2023).
 
-![timeline](timeline.png)
+![timeline](Miscellaneous/timeline.png).
 
 ## Run the Trainer:
 
