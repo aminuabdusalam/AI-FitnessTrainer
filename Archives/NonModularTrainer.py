@@ -25,15 +25,41 @@ while True:
     # print(landmarks)
         
     if len(landmarks) != 0: #check that landmarks were found
-        curls = Curls.Curls(pose_detector, img, count, direction)
-        count, direction = curls.get_curls_count()
+        #find angle for left arm
+        left_arm_angle = pose_detector.find_angle(img, 11, 13, 15)
+        MIN_ANGLE, MAX_ANGLE = 210, 315        
+        percent = np.interp(left_arm_angle,(MIN_ANGLE, MAX_ANGLE),(0, 100)) #returns the one-dimensional piecewise linear interpolant to a function with given discrete data points (xp, fp), evaluated at x.
+        bar = np.interp(left_arm_angle, (MIN_ANGLE, MAX_ANGLE),(650, 100))
+        
+
+        # print(left_arm_angle, percent)
+
+        # #check for the dumbbell curls
+        color = (0, 255, 255)
+        if percent == 100:
+            color = (0, 255, 0)
+            if direction == "UP":
+                count += 0.5
+                direction = "DOWN"
+        
+        if percent == 0:
+            color = (0, 255, 0)
+            if direction == "DOWN":
+                count += 0.5
+                direction = "UP"
         print(count)
 
+        # curls = Curls.Curls(pose_detector, img)
+        # count += curls.get_curls_count()
+        # print(count)
+
+
+
         # Draw Bar
-        cv2.rectangle(img, (1100,100), (1175,650), curls.color, 4) #draws unfilled rectangle that dynamic bar is going to be placed in.
-        cv2.rectangle(img, (1100,int(curls.bar)), (1175,650),curls.color, cv2.FILLED) #draws rectangle whose size changes depending on the bar value.
-        cv2.putText(img, str(int(curls.percent)) + "%", (1100, 75),
-                    cv2.FONT_HERSHEY_PLAIN, 4, curls.color,4)    #renders the text string (i.e.percent) in img.
+        cv2.rectangle(img, (1100,100), (1175,650), color, 4) #draws unfilled rectangle that dynamic bar is going to be placed in.
+        cv2.rectangle(img, (1100,int(bar)), (1175,650),color, cv2.FILLED) #draws rectangle whose size changes depending on the bar value.
+        cv2.putText(img, str(int(percent)) + "%", (1100, 75),
+                    cv2.FONT_HERSHEY_PLAIN, 4, color,4)    #renders the text string (i.e.percent) in img.
             
 
         # Draw Curl Count
@@ -47,6 +73,10 @@ while True:
         cv2.putText(img, "fps= " + str(int(fps)), (50, 100),
                     cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255),5)    #renders the text string (i.e.fps) in img.
       
+
+
+        #find angle for right arm
+        #right_arm_angle = pose_detector.find_angle(img, 12, 14, 16)
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
