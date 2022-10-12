@@ -43,3 +43,5 @@ class Curls():
         return self.count, self.direction
 
     
+
+    
