@@ -28,7 +28,9 @@ python Trainer.py
 ```
 
 ## **References**:
-Project Proposal: [Project Proposal](https://1drv.ms/w/s!AlGAL8aQVodoo2kBj1iwRQkNZL4j?e=aPcxXc)
+Project Proposal: [Project Proposal](ProgressReports/project_proposal.docx)
+
 MediaPipe Pose Solutions [MediaPipe Pose Solutions](https://google.github.io/mediapipe/solutions/pose.html)
+
 More on MediaPipe BlazePose GHUM 3D Model [More on MediaPipe Pose Model](https://drive.google.com/file/d/10WlcTvrQnR_R2TdTmKw0nkyRLqrwNkWU/preview)
 
