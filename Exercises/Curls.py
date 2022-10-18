@@ -2,7 +2,7 @@ import numpy as np
 
 class Curls():
 
-    def __init__(self, detector,img, count, direction, left_arm = True, right_arm = False):
+    def __init__(self, detector,img, count, direction, left_arm = True, right_arm = True):
         self.detector, self.img = detector, img
         self.left_arm, self.right_arm = left_arm, right_arm
         self.count = count
@@ -22,7 +22,7 @@ class Curls():
             self.percent = np.interp(self.get_left_arm_angle(),(self.MIN_ANGLE, self.MAX_ANGLE),(0, 100)) #returns the one-dimensional piecewise linear interpolant to a function with given discrete data points (xp, fp), evaluated at x.
             self.bar = np.interp(self.get_left_arm_angle(),(self.MIN_ANGLE, self.MAX_ANGLE),(650, 100))  
         
-        if self.right_arm:
+        elif self.right_arm:
             self.percent = np.interp(self.get_right_arm_angle(),(self.MIN_ANGLE, self.MAX_ANGLE),(0, 100)) #returns the one-dimensional piecewise linear interpolant to a function with given discrete data points (xp, fp), evaluated at x.
             self.bar = np.interp(self.get_right_arm_angle(),(self.MIN_ANGLE, self.MAX_ANGLE),(650, 100))
         
@@ -30,15 +30,15 @@ class Curls():
         self.color = (0, 255, 255)
         if self.percent == 100:
             self.color = (0, 255, 0)
-            if self.direction == "UP":
+            if self.direction == "upwards":
                 self.count += 0.5
-                self.direction = "DOWN"
+                self.direction = "downwards"
         
         if self.percent == 0:
             self.color = (0, 255, 0)
-            if self.direction == "DOWN":
+            if self.direction == "downwards":
                 self.count += 0.5
-                self.direction = "UP"
+                self.direction = "upwards"
         
         return self.count, self.direction
 
