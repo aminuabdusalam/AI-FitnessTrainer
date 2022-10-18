@@ -136,8 +136,11 @@ class PoseDetector():
                         cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255), 2) #place angle "text" close to middle point (x2, y2)
         return angle
 
+
+
+
 def main():
-    cap = cv2.VideoCapture('PoseVideos/armraise_1.mp4')
+    cap = cv2.VideoCapture('TrainerVideos/pushup.mp4')
     previous_time = 0    
 
 
