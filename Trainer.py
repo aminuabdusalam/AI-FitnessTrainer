@@ -2,10 +2,10 @@ import cv2
 import numpy as np
 import PoseEstimationModule as pem
 import time
-from Exercises import Curls, Pushups
+from Exercises import Curls, Pushups, Squats
 
 
-exercises, choice = ["curls", "pushups"], ""
+exercises, choice = ["curls", "pushups", "squats"], ""
 while choice not in exercises:
     choice = input("Enter the kind of exercise ('help' to view available exercises): ").lower()
     if choice == "help":
@@ -14,7 +14,7 @@ while choice not in exercises:
         print("Maybe missing an 's' or a character? ('help' to view available exercises)")
 
 
-trainer_videos = {"curls":"curls2.mp4", "pushups":"pushups.mp4"}
+trainer_videos = {"curls":"curls.mp4", "pushups":"pushups.mp4", "squats":"squats.mp4"}
 
 
 cap = cv2.VideoCapture("TrainerVideos/" + trainer_videos[choice]) #capture video
@@ -49,6 +49,10 @@ while True:
         if choice == "pushups":
             exercise = Pushups.Pushups(pose_detector, img, count, direction)            
             count, direction = exercise.get_pushups_count()
+
+        if choice == "squats":
+            exercise = Squats.Squats(pose_detector, img, count, direction)            
+            count, direction = exercise.get_squats_count()
 
         
         print(count)
