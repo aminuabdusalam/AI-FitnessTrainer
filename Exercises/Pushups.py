@@ -9,22 +9,14 @@ class Pushups():
         self.direction = direction
         self.MIN_ANGLE, self.MAX_ANGLE = 200, 285
 
-    def  get_legs_angle(self):
-        pass 
-
     def get_left_arm_angle(self):
-        left_arm_angle = self.detector.find_angle(self.img, 11, 13, 15)
+        left_arm_angle = self.detector.find_angle(self.img, 11, 13, 15) #11- left_shoulder, 13- left_elbow, 15- left_wrist. Check Miscellanous/pose_landmarks.png
         return left_arm_angle
 
     def get_right_arm_angle(self):
-        right_arm_angle = self.detector.find_angle(self.img, 12, 14, 16)
+        right_arm_angle = self.detector.find_angle(self.img, 12, 14, 16) #12- right_shoulder, 14- right_elbow, 16- right_wrist
         return right_arm_angle
-
-    def get_arms_angle(self):
-        self.left_arm_angle = self.detector.find_angle(self.img, 11, 13, 15)
-        self.right_arm_angle = self.detector.find_angle(self.img, 12, 14, 16)
-        
-
+   
     def get_pushups_count(self):
         self.percent_left_arm = np.interp(self.get_left_arm_angle(),(self.MIN_ANGLE, self.MAX_ANGLE),(0, 100)) #returns the one-dimensional piecewise linear interpolant to a function with given discrete data points (xp, fp), evaluated at x.
         self.percent_right_arm = np.interp(self.get_right_arm_angle(),(self.MIN_ANGLE, self.MAX_ANGLE),(0, 100)) #returns the one-dimensional piecewise linear interpolant to a function with given discrete data points (xp, fp), evaluated at x.
