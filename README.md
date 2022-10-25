@@ -21,11 +21,18 @@ This section lists the milestones of the project spread across two semesters (Fa
 
 ![timeline](Miscellaneous/timeline.png).
 
-## Run the Trainer:
+## **Run the Trainer:**
 
 ```
 python Trainer.py
 ```
+
+## **Video Walkthrough**
+
+Here's a walkthrough of implemented user stories:
+
+<!-- <img src='https://github.com/aminuabdusalam/AI-FitnessTrainer/pushup_demo.mp4' title='Video Walkthrough' width='' alt='Video Walkthrough' /> -->
+
 
 ## **References**:
 Project Proposal: [Project Proposal](ProgressReports/project_proposal.docx)
