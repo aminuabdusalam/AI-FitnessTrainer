@@ -3,18 +3,39 @@ import numpy as np
 import PoseEstimationModule as pem
 import time
 from Exercises import Curls, Pushups, Squats
+from Text2SpeechSpeech2Text import text_to_speech, speech_to_text 
 
 
-exercises, choice = ["curls", "pushups", "squats"], ""
+exercises, choice, response = ["curls", "push ups", "squats"], "", ["",""]
 while choice not in exercises:
-    choice = input("Enter the kind of exercise ('help' to view available exercises): ").lower()
+    # choice = input("Enter the kind of exercise ('help' to view available exercises): ").lower()
+    text_to_speech("Say your choice of exercise or say help to view available exercises.")
+    choice = speech_to_text()
+    if choice[0] == "p":
+        text_to_speech("Did you mean push ups? Say Yes or No")
+        response = [speech_to_text(), "push ups"]
+    if choice[0] == "s":
+        text_to_speech("Did you mean squats? Say Yes or No")
+        response = [speech_to_text(), "squats"]
+    if choice[0] == "c":
+        text_to_speech("Did you mean curls? Say Yes or No")
+        response = [speech_to_text(), "curls"]
+    if choice[0] == "h":
+        text_to_speech("Did you mean to ask for help? Say Yes or No")
+        response = [speech_to_text(), "help"]
+    
+    if response[0][:3] == "yes":
+        choice = response[1]
+        
     if choice == "help":
-        print("available exercises include", exercises)
+        text_to_speech("available exercises include" + exercises)
+        # print("available exercises include", exercises)
     elif choice not in exercises:
-        print("Maybe missing an 's' or a character? ('help' to view available exercises)")
+        text_to_speech("Maybe missing an 's' or a character? Say 'help' to view available exercises.")
+        # print("Maybe missing an 's' or a character? ('help' to view available exercises)")
 
-
-trainer_videos = {"curls":"curls.mp4", "pushups":"pushups.mp4", "squats":"squats.mp4"}
+choice = "push ups"
+trainer_videos = {"curls":"curls.mp4", "push ups":"pushups.mp4", "squats":"squats.mp4"}
 
 
 cap = cv2.VideoCapture("TrainerVideos/" + trainer_videos[choice]) #capture video
@@ -24,10 +45,9 @@ cap = cv2.VideoCapture("TrainerVideos/" + trainer_videos[choice]) #capture video
 
 pose_detector = pem.PoseDetector()
 
-count = 0
+count, counts = 0, set()
 direction = "upwards" #assigns direction of curl as upward
 previous_time = 0
-
 
 while True:
     success, img = cap.read()
@@ -46,7 +66,7 @@ while True:
             exercise = Curls.Curls(pose_detector, img, count, direction)            
             count, direction = exercise.get_curls_count()
 
-        if choice == "pushups":
+        if choice == "push ups":
             exercise = Pushups.Pushups(pose_detector, img, count, direction)            
             count, direction = exercise.get_pushups_count()
 
@@ -54,8 +74,11 @@ while True:
             exercise = Squats.Squats(pose_detector, img, count, direction)            
             count, direction = exercise.get_squats_count()
 
-        
         print(count)
+    
+        if (count not in counts) and (count == int(count)):
+            counts.add(int(count))
+            text_to_speech("Count is " + str(int(count)))
 
         # Draw Bar
         cv2.rectangle(img, (1100,100), (1175,650), exercise.color, 4) #draws unfilled rectangle that dynamic bar is going to be placed in.
