@@ -4,7 +4,7 @@ import PoseEstimationModule as pem
 import time
 from Exercises import Curls, Pushups, Squats
 from Text2SpeechSpeech2Text import text_to_speech, speech_to_text 
-
+from threading import Thread
 
 exercises, choice, response = ["curls", "push ups", "squats"], "", ["",""]
 while choice not in exercises:
@@ -34,7 +34,7 @@ while choice not in exercises:
         text_to_speech("Maybe missing an 's' or a character? Say 'help' to view available exercises.")
         # print("Maybe missing an 's' or a character? ('help' to view available exercises)")
 
-choice = "push ups"
+# choice = "squats"
 trainer_videos = {"curls":"curls.mp4", "push ups":"pushups.mp4", "squats":"squats.mp4"}
 
 
@@ -78,8 +78,7 @@ while True:
     
         if (count not in counts) and (count == int(count)):
             counts.add(int(count))
-            text_to_speech("Count is " + str(int(count)))
-
+           
         # Draw Bar
         cv2.rectangle(img, (1100,100), (1175,650), exercise.color, 4) #draws unfilled rectangle that dynamic bar is going to be placed in.
         cv2.rectangle(img, (1100,int(exercise.bar)), (1175,650),exercise.color, cv2.FILLED) #draws rectangle whose size changes depending on the bar value.
@@ -97,7 +96,16 @@ while True:
         previous_time = current_time
         cv2.putText(img, "fps= " + str(int(fps)), (50, 100),
                     cv2.FONT_HERSHEY_PLAIN, 2, (255, 255, 255),5)    #renders the text string (i.e.fps) in img.
-      
+
+        if (count not in counts) and (count == int(count)):
+            counts.add(int(count))
+        
+            t2s_thread = Thread(
+                    target=text_to_speech, args=(str(int(count)))
+                )
+           
+            t2s_thread.start()
+            t2s_thread.join()
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
