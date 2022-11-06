@@ -11,7 +11,7 @@ def text_to_speech(text):
     # exercises = ["curls", "pushups", "squats"]
     # text = "available exercises include " + str(exercises)
     tts = gTTS(text)    #convert text to speech using Google Text-to-Speech library (a Python library and CLI tool to interface with Google Translate text-to-speech API)
-    audio_name = "speech.mp4"
+    audio_name = "speech.mp3"
     tts.save(audio_name)
     playsound(audio_name) #play the audio using playsound module.
     print(text)
@@ -21,6 +21,7 @@ def text_to_speech(text):
 
 
 def speech_to_text():
+    text = ""
     with sr.Microphone() as source:
         r.adjust_for_ambient_noise(source) #removes ambient noise
         print("Listening...")
@@ -55,8 +56,8 @@ def main():
 
 if __name__ == "__main__":
     text = "Hello! My name is Aminu."
-    # text_to_speech(text)
-    speech_to_text()
+    text_to_speech(text)
+    # speech_to_text()
 
 # playsound("hi.mp3")
 # os.system("hi.mp3")
