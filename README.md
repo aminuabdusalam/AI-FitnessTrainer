@@ -24,7 +24,7 @@ This section lists the milestones of the project spread across two semesters (Fa
 ## **Run the Trainer:**
 
 ```
-python Trainer.py
+streamlit run TrainerFrontend.py
 ```
 
 ## **Video Walkthrough**
