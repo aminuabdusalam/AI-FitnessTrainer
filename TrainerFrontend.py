@@ -149,7 +149,7 @@ if app_mode == "Curls":
     while capturedVideo.isOpened():
         success, img = capturedVideo.read()
         if not success: #break if video or image has ended
-            break #continue?
+            continue #break?
 
         img = cv2.resize(img, (1280, 720)) #resize video
         img = pose_detector.find_pose(img, False)  #find pose but do not draw so as to focus on the three points angle is going to be calculated for.
