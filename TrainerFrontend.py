@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import PoseEstimationModule as pem
 import streamlit as st
+import subprocess
 import tempfile
 import time
 from Exercises import Curls, Pushups, Squats
@@ -26,7 +27,7 @@ st.markdown(
 )
 
 st.sidebar.title('AI Fitness Trainer')
-st.sidebar.subheader('Parameters')
+
 
 
 @st.cache()
@@ -61,9 +62,94 @@ def image_resize(image, width=None, height=None, inter=cv2.INTER_AREA):
     # return the resized image
     return resized
 
-app_mode = st.sidebar.selectbox('Choose the Exercise',
-['About App','Curls','Squats', 'Pushups']
+
+if st.sidebar.button("About App"):
+    about_project = '''
+    TL; DR: The goal of the project can be summarized as developing an AI fitness trainer embedded with storage and recommender systems and an AI virtual mouse.
+
+    ## Goals
+    - Help the user lose weight, gain muscle, and accomplish other fitness goals.
+    - Attempt to understand the user goals and develop a fitness routine.
+    - Recommend a healthy eating plan.
+    - Ensure all exercises are performed correctly.
+
+    ## Motivation
+
+    - To enhance exposure in the exciting computer vision (CV) field. 
+    - Drive to apply CV in automating “everyday” activities like the process of getting fit. 
+        - For instance, taking on activities like bouldering and hiking to stay fit have not given me desired results. 
+        - If I had an AI Fitness Trainer, accomplishing my fitness goals would have been much easier. 
+
+    ## Impact
+
+    - The project is a win-win for both the developer and the users.
+        - the developer gets to enhance their experience while working on something they are super interested in, and 
+        - the users get a fantastic product that satisfies their need. 
+        
+
+    ## Tech Stack
+
+    - to be completed
+            
+
+    Here is the link to the project repo: [AI Fitness Trainer Github Repo](https://www.github.com/in/aminuabdusalam/AI-FitnessTrainer)
+    '''
+    st.markdown(about_project)
+
+    st.markdown(
+    """
+    <style>
+    [data-testid="stSidebar"][aria-expanded="true"] > div:first-child {
+        width: 400px;
+    }
+    [data-testid="stSidebar"][aria-expanded="false"] > div:first-child {
+        width: 400px;
+        margin-left: -400px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+    )
+
+    about_me = '''
+    # About Me 
+    Hola! this is *Aminu Abdusalam*.
+
+    ## Education
+
+    - Bachelor's degree in Computer Science from Fisk University (in review)
+
+
+    ## Experience
+
+    - Program Management and Software Engineering Intern at Microsoft Corp. (2021 - 2022)
+    - Information Technology Intern at Froedtert Health (2020)
+
+    ## Skills
+
+    - Python
+    - Java
+    - HTML/CSS
+    - Kusto/SQL
+
+    Also connect with me at
+    - [LinkedIn](https://www.linkedin.com/in/aminuabdusalam)
+
+    And check out my other works at
+    - [Github](https://www.github.com/in/aminuabdusalam)
+                
+    '''
+    st.markdown(about_me)
+
+
+
+    
+st.sidebar.subheader('Parameters')
+app_mode = st.sidebar.selectbox('Select Exercise Choice',
+['Curls','Squats', 'Pushups']
 )
+
+
 
 if app_mode == "Curls":
     DEMO_VIDEO = "TrainerVideos/curls.mp4"
@@ -117,9 +203,11 @@ if app_mode == "Curls":
     height = int(capturedVideo.get(cv2.CAP_PROP_FRAME_HEIGHT))
     input_fps = int(capturedVideo.get(cv2.CAP_PROP_FPS))
 
-    codec = cv2.VideoWriter_fourcc('V','P','0','9')
-    out = cv2.VideoWriter('output1.mp4', codec, input_fps, (width, height))
-
+    
+    out = cv2.VideoWriter('curls_recording.avi', 
+                         cv2.VideoWriter_fourcc('M','J','P','G'),
+                         input_fps, (1280,720))
+   
     st.sidebar.text('Input Video')
     st.sidebar.video(tmpfile.name)
 
@@ -149,7 +237,7 @@ if app_mode == "Curls":
     while capturedVideo.isOpened():
         success, img = capturedVideo.read()
         if not success: #break if video or image has ended
-            continue #break?
+            break #break?
 
         img = cv2.resize(img, (1280, 720)) #resize video
         img = pose_detector.find_pose(img, False)  #find pose but do not draw so as to focus on the three points angle is going to be calculated for.
@@ -200,17 +288,25 @@ if app_mode == "Curls":
     # cv2.imshow("Image", img)
     # cv2.waitKey(1)
 
-    st.text('Video Processed')
+    st.text('Recorded Video')
 
-    output_video = open('output1.mp4','rb')
-    out_bytes = output_video.read()
-    st.video(out_bytes)
+    input_file = 'curls_recording.avi'
+    output_file = 'curls_recording.mp4'
+
+    # FFmpeg command to convert AVI to MP4
+    ffmpeg_cmd = ['ffmpeg', '-i', input_file, '-c:v', 'libx264', '-crf', '23', '-preset', 'medium', '-c:a', 'aac', '-b:a', '128k', output_file]
+
+    # Execute the FFmpeg command
+    subprocess.run(ffmpeg_cmd)
+
+    st.video('curls_recording.mp4')
 
     capturedVideo.release()
     out.release()
 
 
-if app_mode == "Squats":
+
+elif app_mode == "Squats":
     DEMO_VIDEO = "TrainerVideos/squats.mp4"
 
     st.set_option('deprecation.showfileUploaderEncoding', False)
@@ -262,8 +358,9 @@ if app_mode == "Squats":
     height = int(capturedVideo.get(cv2.CAP_PROP_FRAME_HEIGHT))
     input_fps = int(capturedVideo.get(cv2.CAP_PROP_FPS))
 
-    codec = cv2.VideoWriter_fourcc('V','P','0','9')
-    out = cv2.VideoWriter('output1.mp4', codec, input_fps, (width, height))
+    out = cv2.VideoWriter('squats_recording.avi', 
+                         cv2.VideoWriter_fourcc('M','J','P','G'),
+                         input_fps, (1280,720))
 
     st.sidebar.text('Input Video')
     st.sidebar.video(tmpfile.name)
@@ -345,17 +442,24 @@ if app_mode == "Squats":
     # cv2.imshow("Image", img)
     # cv2.waitKey(1)
 
-    st.text('Video Processed')
+    st.text('Recorded Video')
 
-    output_video = open('output1.mp4','rb')
-    out_bytes = output_video.read()
-    st.video(out_bytes)
+    input_file = 'squats_recording.avi'
+    output_file = 'squats_recording.mp4'
+
+    # FFmpeg command to convert AVI to MP4
+    ffmpeg_cmd = ['ffmpeg', '-i', input_file, '-c:v', 'libx264', '-crf', '23', '-preset', 'medium', '-c:a', 'aac', '-b:a', '128k', output_file]
+
+    # Execute the FFmpeg command
+    subprocess.run(ffmpeg_cmd)
+
+    st.video('squats_recording.mp4')
 
     capturedVideo.release()
     out.release()
 
 
-if app_mode == "Pushups":
+elif app_mode == "Pushups":
     DEMO_VIDEO = "TrainerVideos/pushups.mp4"
 
     st.set_option('deprecation.showfileUploaderEncoding', False)
@@ -407,8 +511,9 @@ if app_mode == "Pushups":
     height = int(capturedVideo.get(cv2.CAP_PROP_FRAME_HEIGHT))
     input_fps = int(capturedVideo.get(cv2.CAP_PROP_FPS))
 
-    codec = cv2.VideoWriter_fourcc('V','P','0','9')
-    out = cv2.VideoWriter('output1.mp4', codec, input_fps, (width, height))
+    out = cv2.VideoWriter('pushups_recording.avi', 
+                         cv2.VideoWriter_fourcc('M','J','P','G'),
+                         input_fps, (1280,720))
 
     st.sidebar.text('Input Video')
     st.sidebar.video(tmpfile.name)
@@ -490,15 +595,31 @@ if app_mode == "Pushups":
     # cv2.imshow("Image", img)
     # cv2.waitKey(1)
 
-    st.text('Video Processed')
+    st.text('Recorded Video')
 
-    output_video = open('output1.mp4','rb')
-    out_bytes = output_video.read()
-    st.video(out_bytes)
+    # recorded_video = open('pushups_recording.avi','rb')
+    # # recorded_video = open('TrainerVideos/pushups.mp4','rb')
+    # out_bytes = recorded_video.read()
+    # st.video(out_bytes)
+
+
+    input_file = 'pushups_recording.avi'
+    output_file = 'pushups_recording.mp4'
+
+    # FFmpeg command to convert AVI to MP4
+    ffmpeg_cmd = ['ffmpeg', '-i', input_file, '-c:v', 'libx264', '-crf', '23', '-preset', 'medium', '-c:a', 'aac', '-b:a', '128k', output_file]
+
+    # Execute the FFmpeg command
+    subprocess.run(ffmpeg_cmd)
+
+    st.video('pushups_recording.mp4')
+
 
     capturedVideo.release()
     out.release()
 
+    # Closes all the frames
+    # cv2.destroyAllWindows()
 
-
+    st.button("report page")
 
