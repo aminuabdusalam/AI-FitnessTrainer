@@ -30,7 +30,7 @@ st.sidebar.title('AI Fitness Trainer')
 
 
 
-@st.cache()
+@st.cache_resource()
 def image_resize(image, width=None, height=None, inter=cv2.INTER_AREA):
     # initialize the dimensions of the image to be resized and
     # grab the image size
@@ -62,8 +62,8 @@ def image_resize(image, width=None, height=None, inter=cv2.INTER_AREA):
     # return the resized image
     return resized
 
-
-if st.sidebar.button("About App"):
+about = st.sidebar.button("About App")
+if about:
     about_project = '''
     TL; DR: The goal of the project can be summarized as developing an AI fitness trainer embedded with storage and recommender systems and an AI virtual mouse.
 
@@ -132,11 +132,9 @@ if st.sidebar.button("About App"):
     - HTML/CSS
     - Kusto/SQL
 
-    Also connect with me at
-    - [LinkedIn](https://www.linkedin.com/in/aminuabdusalam)
+    Also connect with me at [LinkedIn](https://www.linkedin.com/in/aminuabdusalam)
 
-    And check out my other works at
-    - [Github](https://www.github.com/in/aminuabdusalam)
+    And check out my other works at [Github](https://www.github.com/in/aminuabdusalam)
                 
     '''
     st.markdown(about_me)
@@ -151,8 +149,8 @@ app_mode = st.sidebar.selectbox('Select Exercise Choice',
 
 
 
-if app_mode == "Curls":
-    DEMO_VIDEO = "TrainerVideos/curls.mp4"
+if app_mode == "Curls" and not about:
+    DEMO_VIDEO = "TrainerVideos/curls_aminu.mp4"
 
     st.set_option('deprecation.showfileUploaderEncoding', False)
 
@@ -294,7 +292,7 @@ if app_mode == "Curls":
     output_file = 'curls_recording.mp4'
 
     # FFmpeg command to convert AVI to MP4
-    ffmpeg_cmd = ['ffmpeg', '-i', input_file, '-c:v', 'libx264', '-crf', '23', '-preset', 'medium', '-c:a', 'aac', '-b:a', '128k', output_file]
+    ffmpeg_cmd = ['ffmpeg', '-i', input_file, '-c:v', 'libx264', '-crf', '23', '-preset', 'medium', '-c:a', 'aac', '-b:a', '128k', "-y", output_file]
 
     # Execute the FFmpeg command
     subprocess.run(ffmpeg_cmd)
@@ -304,10 +302,15 @@ if app_mode == "Curls":
     capturedVideo.release()
     out.release()
 
+    
+    send_report = st.button("Send Report")
+    if send_report:
+        pass #create a function for sending report and then delete recorded video.
 
 
-elif app_mode == "Squats":
-    DEMO_VIDEO = "TrainerVideos/squats.mp4"
+
+if app_mode == "Squats" and not about:
+    DEMO_VIDEO = "TrainerVideos/squats_aminu.mp4"
 
     st.set_option('deprecation.showfileUploaderEncoding', False)
 
@@ -448,7 +451,7 @@ elif app_mode == "Squats":
     output_file = 'squats_recording.mp4'
 
     # FFmpeg command to convert AVI to MP4
-    ffmpeg_cmd = ['ffmpeg', '-i', input_file, '-c:v', 'libx264', '-crf', '23', '-preset', 'medium', '-c:a', 'aac', '-b:a', '128k', output_file]
+    ffmpeg_cmd = ['ffmpeg', '-i', input_file, '-c:v', 'libx264', '-crf', '23', '-preset', 'medium', '-c:a', 'aac', '-b:a', '128k', "-y", output_file]
 
     # Execute the FFmpeg command
     subprocess.run(ffmpeg_cmd)
@@ -458,9 +461,14 @@ elif app_mode == "Squats":
     capturedVideo.release()
     out.release()
 
+    
+    send_report = st.button("Send Report")
+    if send_report:
+        pass #create a function for sending report
 
-elif app_mode == "Pushups":
-    DEMO_VIDEO = "TrainerVideos/pushups.mp4"
+
+if app_mode == "Pushups" and not about:
+    DEMO_VIDEO = "TrainerVideos/pushups_aminu.mp4"
 
     st.set_option('deprecation.showfileUploaderEncoding', False)
 
@@ -607,7 +615,7 @@ elif app_mode == "Pushups":
     output_file = 'pushups_recording.mp4'
 
     # FFmpeg command to convert AVI to MP4
-    ffmpeg_cmd = ['ffmpeg', '-i', input_file, '-c:v', 'libx264', '-crf', '23', '-preset', 'medium', '-c:a', 'aac', '-b:a', '128k', output_file]
+    ffmpeg_cmd = ['ffmpeg', '-i', input_file, '-c:v', 'libx264', '-crf', '23', '-preset', 'medium', '-c:a', 'aac', '-b:a', '128k', "-y", output_file]
 
     # Execute the FFmpeg command
     subprocess.run(ffmpeg_cmd)
@@ -618,8 +626,7 @@ elif app_mode == "Pushups":
     capturedVideo.release()
     out.release()
 
-    # Closes all the frames
-    # cv2.destroyAllWindows()
-
-    st.button("report page")
+    send_report = st.button("Send Report")
+    if send_report:
+        pass #create a function for sending report
 
