@@ -133,7 +133,7 @@ def render_curls_trainer(video_file_buffer):
 
             img = cv2.resize(img,(0,0),fx = 0.8 , fy = 0.8)
             img = image_resize(image = img, width = 640)
-            stframe.image(img,channels = 'BGR',use_column_width=True)
+            stframe.image(img,channels = 'BGR',width='stretch')
 
 
     # cv2.imshow("Image", img)
@@ -253,7 +253,7 @@ def render_pushups_trainer(video_file_buffer):
 
             img = cv2.resize(img,(0,0),fx = 0.8 , fy = 0.8)
             img = image_resize(image = img, width = 640)
-            stframe.image(img,channels = 'BGR',use_column_width=True)
+            stframe.image(img,channels = 'BGR',width='stretch')
 
 
     # cv2.imshow("Image", img)
@@ -379,7 +379,7 @@ def render_squats_trainer(video_file_buffer):
 
             img = cv2.resize(img,(0,0),fx = 0.8 , fy = 0.8)
             img = image_resize(image = img, width = 640)
-            stframe.image(img,channels = 'BGR',use_column_width=True)
+            stframe.image(img,channels = 'BGR',width='stretch')
 
 
     # cv2.imshow("Image", img)
@@ -560,8 +560,6 @@ if "report_count" not in st.session_state:
 
 if (app_mode == "Curls" or app_mode == "Pushups" or app_mode == "Squats") and not about:
 
-    st.set_option('deprecation.showfileUploaderEncoding', False)
-
     use_webcam = st.sidebar.button('Use Webcam')
     record = st.sidebar.checkbox("Record Video")
     if record:
@@ -619,7 +617,7 @@ if (app_mode == "Curls" or app_mode == "Pushups" or app_mode == "Squats") and no
     
 if app_mode == "GenerateReport" and app_mode != "Curls" and app_mode != "Pushups" and app_mode != "Squats" and not about:
     st.write("latest exercise type: " + str(st.session_state.exercise_type))
-    st.write(st.session_state.exercise_type + " count: " + str(st.session_state.report_count))
+    st.write(str(st.session_state.exercise_type) + " count: " + str(st.session_state.report_count))
     with st.form("my_form"):
             input_text = st.text_input("Enter weight (Kg) and email address in format weight email e.g. 60 myemail@domain.com")
             submit_button = st.form_submit_button(label="Submit")

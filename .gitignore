@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Runtime recording artifacts from Streamlit trainer
+*_recording.avi
