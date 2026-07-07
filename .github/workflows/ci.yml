@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint & syntax check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+
+      - name: Install ruff
+        run: pip install ruff
+
+      - name: Ruff lint (non-blocking)
+        run: ruff check . --output-format=github || true
+
+      - name: Python syntax check
+        run: |
+          python -m compileall -q -f \
+            PoseEstimationModule.py \
+            Text2SpeechSpeech2Text.py \
+            Trainer.py \
+            trainer_frontend.py \
+            calories_burned.py \
+            duration.py \
+            report.py
