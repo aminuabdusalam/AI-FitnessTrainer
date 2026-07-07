@@ -18,9 +18,37 @@ This section lists all the requirements to be completed for the project and thei
 ![functional requirements for the project](Miscellaneous/requirements.png)
 
 
-## **Run the Trainer:**
+## **Features**
+- Real-time pose estimation for pushups, squats, and curls via MediaPipe BlazePose GHUM 3D
+- Automatic rep counting and form feedback
+- Calorie & duration tracking with post-workout report
+- Text-to-speech coaching cues (gTTS) and speech-to-text command input
+- AI virtual mouse for hands-free control
+- Streamlit web UI
 
+## **Setup**
+
+Requires **Python 3.9** (mediapipe 0.8.x is not compatible with newer Pythons).
+
+```bash
+# Clone
+git clone https://github.com/aminuabdusalam/AI-FitnessTrainer.git
+cd AI-FitnessTrainer
+
+# Create a virtual environment
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+# macOS/Linux
+source .venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
 ```
+
+## **Run the Trainer**
+
+```bash
 streamlit run trainer_frontend.py
 ```
 
